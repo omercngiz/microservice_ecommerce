@@ -105,6 +105,9 @@ importers:
       '@clerk/fastify':
         specifier: ^3.1.10
         version: 3.1.10(fastify@5.8.4)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@digitalocean/kafka':
+        specifier: workspace:*
+        version: link:../../packages/kafka
       '@digitalocean/order-db':
         specifier: workspace:*
         version: link:../../packages/order-db
@@ -136,6 +139,9 @@ importers:
 
   apps/payment-service:
     dependencies:
+      '@digitalocean/kafka':
+        specifier: workspace:*
+        version: link:../../packages/kafka
       '@hono/clerk-auth':
         specifier: ^3.1.1
         version: 3.1.1(hono@4.12.9)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -176,6 +182,9 @@ importers:
       '@clerk/express':
         specifier: ^2.1.0
         version: 2.1.0(express@5.2.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@digitalocean/kafka':
+        specifier: workspace:*
+        version: link:../../packages/kafka
       '@digitalocean/product-db':
         specifier: workspace:*
         version: link:../../packages/product-db

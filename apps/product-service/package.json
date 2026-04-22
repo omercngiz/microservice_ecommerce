@@ -17,7 +17,8 @@
 		"@clerk/express": "^2.1.0",
 		"cors": "^2.8.6",
 		"express": "^5.2.1",
-		"@digitalocean/product-db": "workspace:*"
+		"@digitalocean/product-db": "workspace:*",
+		"@digitalocean/kafka": "workspace:*"
 	},
 	"devDependencies": {
 		"@digitalocean/eslint-config": "workspace:*",
