@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Prisma, prisma } from '@digitalocean/product-db';
+import { producer } from '../utils/kafka';
 
 export const createProduct = async (req: Request, res: Response) => {
     const body = req.body;
@@ -19,6 +20,10 @@ export const createProduct = async (req: Request, res: Response) => {
     const products = await prisma.$transaction(
         items.map((data) => prisma.product.create({ data }))
     );
+
+    producer.send({
+        topic: 'product-created',
+        
     res.status(201).json(products);
 }
 

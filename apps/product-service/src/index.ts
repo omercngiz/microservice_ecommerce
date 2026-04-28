@@ -4,6 +4,7 @@ import { clerkMiddleware } from '@clerk/express';
 import { shouldBeUser } from './middleware/auth';
 import productRouter from './routes/product.route';
 import categoryRouter from './routes/category.route';
+import { producer, consumer } from './utils/kafka';
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -34,6 +35,16 @@ app.get('/test', shouldBeUser, (req:Request, res:Response) => {
   res.json({ message: 'Authenticated!', userId: req.userId });
 });
 
-app.listen(PORT, () => {
-  console.log(`Product Service is running on port ${PORT}`);
-});
+const start = async () => {
+  try {
+    await Promise.all([consumer.connect(), producer.connect()]);
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to connect to Kafka:', error);
+    process.exit(1);
+  } 
+}
+
+start();
