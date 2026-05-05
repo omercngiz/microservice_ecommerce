@@ -17,13 +17,10 @@ export const createProduct = async (req: Request, res: Response) => {
         return res.status(201).json(product);
     }
 
-    const products = await prisma.$transaction(
-        items.map((data) => prisma.product.create({ data }))
-    );
+    const products = await prisma.product.createMany({ data: items });
 
-    producer.send({
-        topic: 'product-created',
-        
+    producer.send("product.created", { value: products });
+
     res.status(201).json(products);
 }
 
@@ -61,6 +58,8 @@ export const deleteProduct = async (req: Request, res: Response) => {
     await prisma.product.delete({
         where: { id }
     });
+
+    producer.send("product.deleted", { value: id });
 
     return res.status(200).json({ message: `Product with ID ${id} has been deleted` });
 }

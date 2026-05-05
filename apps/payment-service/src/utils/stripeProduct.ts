@@ -29,6 +29,26 @@ export const getStripeProductPrice = async (productId: string) => {
     }
 }
 
+export const createStripeProducts = async (items: StripeProductType[]) => {
+    try {
+        const products = await Promise.all(items.map((item) => createStripeProduct(item)));
+        return products;
+    } catch (error) {
+        console.log(error);
+        return error;
+    }
+}
+
+export const deleteStripeProduct = async (productId: string) => {
+    try {
+        const deletedProduct = await stripe.products.del(productId);
+        return deletedProduct;
+    }catch (error) {
+        console.log(error);
+        return error;
+    }
+}
+
 export const listStripeProducts = async () => {
     try {
         const products = await stripe.products.list();
