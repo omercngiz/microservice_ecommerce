@@ -5,7 +5,8 @@
 	"main": "src/index.ts",
 	"type": "module",
 	"dependencies": {
-		"@digitalocean/product-db": "workspace:*"
+		"@digitalocean/product-db": "workspace:*",
+		"@digitalocean/order-db": "workspace:*"
 	},
 	"devDependencies": {
 		"@digitalocean/typescript-config": "workspace:*",

@@ -14,6 +14,8 @@ export const createProduct = async (req: Request, res: Response) => {
 
     if (items.length === 1) {
         const product = await prisma.product.create({ data: items[0]! });
+        producer.send("product.created", { value: product });
+
         return res.status(201).json(product);
     }
 

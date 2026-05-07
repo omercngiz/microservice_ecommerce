@@ -2,6 +2,7 @@ import { Consumer, Kafka } from "kafkajs";
 
 export const createKafkaConsumer = ( kafka: Kafka, groupId: string ) => {
     const consumer: Consumer = kafka.consumer({ groupId });
+    const handlers: Map<string, (message: any) => Promise<void>> = new Map();
 
     const connect = async () => {
         await consumer.connect();
@@ -9,17 +10,22 @@ export const createKafkaConsumer = ( kafka: Kafka, groupId: string ) => {
     }
 
     const subscribe = async ( topic: string, handler: (message: any) => Promise<void> ) => {
+        handlers.set(topic, handler);
+
         await consumer.subscribe({ 
             topic: topic, 
             fromBeginning: true 
         });
+    }
 
+    const run = async () => {
         await consumer.run({
-            eachMessage: async ({ topic, partition, message }) => {
+            eachMessage: async ({ topic, message }) => {
                 try {
+                    const handler = handlers.get(topic);
                     const value = message.value?.toString();
                     
-                    if (value) {
+                    if (value && handler) {
                         await handler(JSON.parse(value));
                     }
                 }
@@ -37,6 +43,7 @@ export const createKafkaConsumer = ( kafka: Kafka, groupId: string ) => {
     return {
         connect,
         subscribe,
+        run,
         disconnect
     };
 }

@@ -1,0 +1,8 @@
+For start up in development env \
+ \* Start docker kafka image
+
+    Product service
+        * Start docker postgres image
+
+    Order service
+        * Start mongodb using cloude.mongodb.com -> omer.my.acc

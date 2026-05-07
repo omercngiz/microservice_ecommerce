@@ -1,12 +1,12 @@
 import { consumer } from "./kafka.js";
-import { createStripeProducts, deleteStripeProduct } from "./stripeProduct.js";
+import { createStripeProduct, deleteStripeProduct } from "./stripeProduct.js";
 
 export const runKafkaSubscribtions = async () => {
     consumer.subscribe("product.created", async (message) => {
         const products = message.value;
         console.log("Received product.created event:", products);
 
-        await createStripeProducts(products);
+        await createStripeProduct(products);
     });
 
     consumer.subscribe("product.deleted", async (message) => {
@@ -15,4 +15,6 @@ export const runKafkaSubscribtions = async () => {
 
         await deleteStripeProduct(productId);
     });
+
+    await consumer.run();
 }

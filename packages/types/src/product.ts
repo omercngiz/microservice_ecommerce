@@ -7,5 +7,7 @@ export type CategoryType = Category;
 export type StripeProductType = {
     id: string;
     name: string;
+    description: string;
+    slug: string;
     price: number;
 };

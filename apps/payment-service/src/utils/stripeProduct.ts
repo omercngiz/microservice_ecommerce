@@ -5,6 +5,10 @@ export const createStripeProduct = async (item: StripeProductType) => {
     try {
         const product = await stripe.products.create({
             name: item.name,
+            metadata: {
+                slug: item.slug,
+            },
+            description: item.description,
             default_price_data: {
                 currency: "usd",
                 unit_amount: item.price,
@@ -41,6 +45,17 @@ export const createStripeProducts = async (items: StripeProductType[]) => {
 
 export const deleteStripeProduct = async (productId: string) => {
     try {
+        await stripe.products.update(productId, { default_price: '' });
+
+        const prices = await stripe.prices.list({
+            product: productId,
+            active: true
+        });
+
+        await Promise.all(
+            prices.data.map((price) => stripe.prices.update(price.id, { active: false }))
+        );
+
         const deletedProduct = await stripe.products.del(productId);
         return deletedProduct;
     }catch (error) {
