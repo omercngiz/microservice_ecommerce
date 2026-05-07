@@ -8,6 +8,8 @@ const webhooksRoute = new Hono();
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
 
 webhooksRoute.post("/stripe", async (c) => {
+    console.log("[DEBUG] [webhooks/stripe] Endpoint hit");
+
     const body = await c.req.text();
     const signature = c.req.header("stripe-signature") as string;
 
@@ -17,7 +19,7 @@ webhooksRoute.post("/stripe", async (c) => {
         event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
     } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
-        console.log("Webhook signature verification failed.", message);
+        console.log("[ERROR] [webhooks/stripe] Webhook signature verification failed.", message);
         return c.text("Webhook Error: " + message, 400);
     }
 
@@ -26,13 +28,14 @@ webhooksRoute.post("/stripe", async (c) => {
             const session = event.data.object as Stripe.Checkout.Session;
             const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
             // TODO: create order
-            console.log("checkout.session.completed Session: ", session);
+            console.log("[DEBUG] [webhooks/stripe] checkout.session.completed Session: ", session);
             producer.send("payment.successful", {
                 value: {
                     userId: session.client_reference_id,
-                    email: session.customer_details?.email,
-                    amount: session.amount_total,
-                    status: session.payment_status === "paid" ? "success" : "failed",
+                    userEmail: session.customer_details?.email,
+                    totalPrice: session.amount_total,
+                    status: session.payment_status === "paid" ? "paid" : "pending",
+                    quantity: lineItems.data.reduce((total, item) => total + (item.quantity ?? 0), 0),
                     products: lineItems.data.map((item) => ({
                         name: item.description,
                         quantity: item.quantity,
@@ -41,7 +44,7 @@ webhooksRoute.post("/stripe", async (c) => {
                 }
             });
 
-            console.log("WEBHOOK RECEIVED: ", session, lineItems);
+            console.log("[DEBUG] [webhooks/stripe] WEBHOOK RECEIVED: ", session, lineItems);
             break;
         }
         default:

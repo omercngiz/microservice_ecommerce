@@ -5,12 +5,17 @@ export enum OrderStatus {
     SHIPPED = 'shipped',
     DELIVERED = 'delivered',
     CANCELLED = 'cancelled',
+    PAID = 'paid',
 }
 
 const orderSchema = new mongoose.Schema({
     userId: { type: String, required: true },
     userEmail: { type: String, required: true },
-    productId: { type: String, required: true },
+    products: { type: [{ 
+        name: String, 
+        quantity: Number, 
+        price: Number }], 
+        required: true },
     quantity: { type: Number, required: true },
     totalPrice: { type: Number, required: true },
     status: { type: String, enum: Object.values(OrderStatus), default: OrderStatus.PENDING },

@@ -1,6 +1,9 @@
 For start up in development env \
  \* Start docker kafka image
 
+    Payment Service 
+        * Start ngrok for stripe webhook
+
     Product service
         * Start docker postgres image
 

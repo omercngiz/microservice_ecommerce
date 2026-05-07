@@ -6,6 +6,8 @@ import { getStripeProductPrice } from "../utils/stripeProduct.js";
 const sessionRoute = new Hono();
 
 sessionRoute.post("/create-checkout-session", shouldBeUser, async (c) => {
+    console.log("[DEBUG] [session/create-checkout-session] Endpoint hit");
+    
     const { cart } = await c.req.json();
     console.log("Received cart: ", cart);
     const userId = c.get("userId") as string;
@@ -38,6 +40,8 @@ sessionRoute.post("/create-checkout-session", shouldBeUser, async (c) => {
 });
 
 sessionRoute.get("/:session_id", async (c) => {
+    console.log("[DEBUG] [session/:session_id] Endpoint hit");
+
     const { session_id } = c.req.param();
     const session = await stripe.checkout.sessions.retrieve(
         session_id as string,
