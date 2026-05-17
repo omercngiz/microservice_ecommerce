@@ -1,15 +1,16 @@
 import FilterBar from "@/components/filterBar";
 import { FilterItem } from "@/components/filterItem";
+import GaleryItem from "@/components/galeryItem";
 import { ItemCard } from "@/components/itemCard";
 import { ItemPanel } from "@/components/itemPanel";
-import PageBanner from "@/components/pageBanner";
 import SearchBar from "@/components/searchBar";
 import SortMenu from "@/components/sortMenu";
+import VideoHero from "@/components/videoHero";
 
 export default function Home() {
 	return (
 		<>
-			<PageBanner title="Hoş Geldiniz" description="Aşk olmadan, Meşk omaz." />
+			<VideoHero />
 
 			<section className="flex flex-1 flex-col items-center justify-center px-4 py-4 text-center sm:py-6 md:px-12">
 				<FilterBar>
@@ -22,6 +23,9 @@ export default function Home() {
 					<FilterItem name="Murakka" slug="murakka" queryKey="category" />
 					<SortMenu />
 				</FilterBar>
+
+				<GaleryItem imageSrc="/besmele.png" alt="Besmele" />
+
 				<ItemPanel className="mt-6">
 					<ItemCard />
 					<ItemCard />

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
+import { Playfair_Display } from "next/font/google";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { CartProvider } from "@/context/cart-context";
@@ -7,9 +7,9 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { trTR } from "@clerk/localizations";
 
-const montserrat = Montserrat({
+const playfairDisplay = Playfair_Display({
 	subsets: ["latin"],
-	variable: "--font-montserrat",
+	variable: "--font-playfair",
 });
 
 export const metadata: Metadata = {
@@ -29,12 +29,12 @@ export default function RootLayout({
 				theme: "simple",
 				variables: {
 					colorPrimary: "#3b82f6",
-					fontFamily: "var(--font-montserrat)",
+					fontFamily: "var(--font-playfair)",
 				},
 			}}
 		>
-			<html lang="tr" className={montserrat.variable}>
-				<body className="flex min-h-dvh flex-col font-(family-name:--font-montserrat) text-primary antialiased">
+			<html lang="tr" className={playfairDisplay.variable}>
+				<body className="flex min-h-dvh flex-col font-(family-name:--font-playfair) text-primary antialiased">
 					<CartProvider>
 						<Navbar />
 						<main className="flex-1">{children}</main>

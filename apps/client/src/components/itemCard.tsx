@@ -2,11 +2,11 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
-export function ItemCard() {
+export function ItemCard({ imageSrc }: { imageSrc?: string }) {
 	return (
 		<div className="overflow-hidden rounded-xl border border-border bg-background transition-shadow hover:shadow-md">
 			<Image
-				src="https://picsum.photos/200/300"
+				src={imageSrc || "https://picsum.photos/200/300"}
 				alt="Item Image"
 				width={400}
 				height={300}
