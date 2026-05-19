@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { getMeController, loginController, logoutController, refreshTokenController, registerController } from './controller';
-import { requireAuth } from './middleware';
+import { requireAuth } from "@digitalocean/auth-middleware";
 
 const authRouter: Router = Router();
 

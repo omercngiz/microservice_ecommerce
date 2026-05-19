@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 const app = express();
 const PORT = process.env.PORT || 8003;
 
-//app.use(cors({ origin:["http://localhost:3001"], credentials: true }));
+app.use(cors({ origin:["http://localhost:3001"], credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 

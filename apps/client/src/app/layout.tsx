@@ -3,9 +3,8 @@ import { Playfair_Display } from "next/font/google";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { CartProvider } from "@/context/cart-context";
+import { AuthProvider } from "@/context/auth-context";
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
-import { trTR } from "@clerk/localizations";
 
 const playfairDisplay = Playfair_Display({
 	subsets: ["latin"],
@@ -23,25 +22,16 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<ClerkProvider
-			localization={trTR}
-			appearance={{
-				theme: "simple",
-				variables: {
-					colorPrimary: "#3b82f6",
-					fontFamily: "var(--font-playfair)",
-				},
-			}}
-		>
-			<html lang="tr" className={playfairDisplay.variable}>
-				<body className="flex min-h-dvh flex-col font-(family-name:--font-playfair) text-primary antialiased">
+		<html lang="tr" className={playfairDisplay.variable}>
+			<body className="flex min-h-dvh flex-col font-(family-name:--font-playfair) text-primary antialiased">
+				<AuthProvider>
 					<CartProvider>
 						<Navbar />
 						<main className="flex-1">{children}</main>
 						<Footer />
 					</CartProvider>
-				</body>
-			</html>
-		</ClerkProvider>
+				</AuthProvider>
+			</body>
+		</html>
 	);
 }

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Menu, X, ShoppingCart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/cart-context";
-import { Show } from "@clerk/nextjs";
+import { useAuth } from "@/context/auth-context";
 import UserProfileButton from "./userProfileButton";
 import { Logo } from "./logo";
 
@@ -18,6 +18,7 @@ const navLinks = [
 export function Navbar() {
 	const [isOpen, setIsOpen] = useState(false);
 	const { totalItems } = useCart();
+	const { isAuthenticated } = useAuth();
 
 	return (
 		<header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
@@ -56,17 +57,16 @@ export function Navbar() {
 						)}
 					</Link>
 
-					<Show when="signed-out">
+					{isAuthenticated ? (
+						<UserProfileButton />
+					) : (
 						<Link
 							href="/auth"
 							className="rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
 						>
 							Giriş Yap
 						</Link>
-					</Show>
-					<Show when="signed-in">
-						<UserProfileButton />
-					</Show>
+					)}
 				</div>
 
 				{/* Mobile Toggle */}
@@ -112,17 +112,16 @@ export function Navbar() {
 						</Link>
 					))}
 
-					<Show when="signed-out">
+					{isAuthenticated ? (
+						<UserProfileButton />
+					) : (
 						<Link
 							href="/auth"
 							className="rounded-lg bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-hover"
 						>
 							Giriş Yap
 						</Link>
-					</Show>
-					<Show when="signed-in">
-						<UserProfileButton />
-					</Show>
+					)}
 				</div>
 			</div>
 		</header>
