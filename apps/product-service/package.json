@@ -1,5 +1,5 @@
 {
-	"name": "@digitalocean/product-service",
+	"name": "product-service",
 	"version": "1.0.0",
 	"description": "",
 	"main": "src/index.ts",

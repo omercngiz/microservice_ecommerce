@@ -69,7 +69,7 @@ export default function CartPage() {
 									{/* Connector line */}
 									{index < STEPS.length - 1 && (
 										<div
-											className={`mt-[18px] mx-3 h-0.5 flex-1 rounded-full transition-colors ${
+											className={`mt-4.5 mx-3 h-0.5 flex-1 rounded-full transition-colors ${
 												isCompleted ? "bg-accent" : "bg-border"
 											}`}
 										/>
