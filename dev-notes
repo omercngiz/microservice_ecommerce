@@ -6,6 +6,7 @@ For start up in development env \
 
     Product service
         * Start docker postgres image
+        * Cloudinary for images
 
     Order service
         * Start mongodb using cloude.mongodb.com -> omer.my.acc

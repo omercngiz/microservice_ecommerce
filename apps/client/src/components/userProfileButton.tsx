@@ -1,5 +1,5 @@
 import { UserButton } from "@clerk/nextjs";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, StoreIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 const UserProfileButton = () => {
@@ -14,6 +14,11 @@ const UserProfileButton = () => {
 					label="Siparişler"
 					labelIcon={<ShoppingBag className="w-4 h-4" />}
 					onClick={() => router.push("/orders")}
+				/>
+				<UserButton.Action
+					label="Satıcı Paneli"
+					labelIcon={<StoreIcon className="w-4 h-4" />}
+					onClick={() => router.push("/seller")}
 				/>
 			</UserButton.MenuItems>
 		</UserButton>

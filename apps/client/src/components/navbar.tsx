@@ -7,7 +7,6 @@ import { cn } from "@/lib/utils";
 import { useCart } from "@/context/cart-context";
 import { Show } from "@clerk/nextjs";
 import UserProfileButton from "./userProfileButton";
-import { usePathname } from "next/navigation";
 import { Logo } from "./logo";
 
 const navLinks = [
@@ -19,22 +18,6 @@ const navLinks = [
 export function Navbar() {
 	const [isOpen, setIsOpen] = useState(false);
 	const { totalItems } = useCart();
-	const pathname = usePathname();
-
-	if (pathname === "/") {
-		return (
-			<header className="fixed max-w-dvw top-0 left-0 right-0 z-50">
-				<nav className="flex items-center justify-center px-4 py-5 md:justify-start md:px-8">
-					<Link
-						href="/"
-						className="text-2xl font-bold tracking-widest text-white drop-shadow-md"
-					>
-						<Logo />
-					</Link>
-				</nav>
-			</header>
-		);
-	}
 
 	return (
 		<header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">

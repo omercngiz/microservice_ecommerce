@@ -11,7 +11,7 @@ export function ContactContent() {
 			{/* Hero Banner — same style as home & about */}
 			<PageBanner
 				title="İletişim"
-				description="Projeleriniz için bizimle iletişime geçin."
+				description="Sorularınız ve fikirlerinizi bizimle paylaşın."
 			/>
 
 			{/* Contact + Map */}

@@ -15,6 +15,30 @@ importers:
         specifier: ^2.8.20
         version: 2.8.20
 
+  apps/auth-service:
+    devDependencies:
+      '@digitalocean/eslint-config':
+        specifier: workspace:*
+        version: link:../../packages/eslint-config
+      '@digitalocean/types':
+        specifier: workspace:*
+        version: link:../../packages/types
+      '@digitalocean/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
+      '@types/node':
+        specifier: ^22.19.15
+        version: 22.19.15
+      eslint:
+        specifier: ^9.0.0
+        version: 9.39.4(jiti@2.6.1)
+      tsx:
+        specifier: ^4.21.0
+        version: 4.21.0
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+
   apps/client:
     dependencies:
       '@clerk/localizations':

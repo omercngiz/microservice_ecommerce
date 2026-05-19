@@ -13,9 +13,10 @@ const sortOptions = [
 
 interface SortMenuProps {
 	queryKey?: string;
+	className?: string;
 }
 
-export function SortMenu({ queryKey = "sort" }: SortMenuProps) {
+export function SortMenu({ queryKey = "sort", className }: SortMenuProps) {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const pathname = usePathname();
@@ -49,7 +50,7 @@ export function SortMenu({ queryKey = "sort" }: SortMenuProps) {
 	}, []);
 
 	return (
-		<div ref={menuRef} className="relative">
+		<div ref={menuRef} className={`relative ${className}`}>
 			<button
 				type="button"
 				onClick={() => setOpen((prev) => !prev)}

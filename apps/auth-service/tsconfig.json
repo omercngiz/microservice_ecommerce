@@ -1,0 +1,3 @@
+{
+    "extends": "@digitalocean/typescript-config/base.json"
+}

@@ -4,7 +4,7 @@ interface FilterBarProps {
 
 const FilterBar = ({ children }: FilterBarProps) => {
 	return (
-		<div className="flex flex-wrap m-2 gap-3 rounded-lg bg-blue-300 py-1 px-1">
+		<div className="flex flex-wrap justify-between p-2 gap-3 rounded-lg">
 			{children}
 		</div>
 	);

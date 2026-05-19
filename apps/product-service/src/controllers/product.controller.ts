@@ -66,6 +66,34 @@ export const deleteProduct = async (req: Request, res: Response) => {
     return res.status(200).json({ message: `Product with ID ${id} has been deleted` });
 }
 
+export const getProductBySlug = async (req: Request, res: Response) => {
+    const slug = req.params.slug as string;
+
+    const product = await prisma.product.findUnique({
+        where: { slug },
+        select: {
+            id: true,
+            name: true,
+            price: true,
+            slug: true,
+            description: true,
+            images: true,
+            category: {
+                select: {
+                    name: true,
+                    slug: true,
+                }
+            }
+        }
+    });
+
+    if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+    }
+
+    return res.status(200).json(product);
+}
+
 export const getProduct = async (req: Request, res: Response) => {
     const id = req.params.id;
     
@@ -79,7 +107,20 @@ export const getProduct = async (req: Request, res: Response) => {
     
     const product = await prisma.product.findUnique({
         where: { id },
-        include: { category: true },
+        select: {
+            id: true,
+            name: true,
+            price: true,
+            slug: true,
+            description: true,
+            images: true,
+            category: {
+                select: {
+                    name: true,
+                    slug: true,
+                }
+            }
+        }
     });
 
     if (!product) {
@@ -126,9 +167,21 @@ export const getProducts = async (req: Request, res: Response) => {
                 ],
             }),
         },
+        select: {
+            id: true,
+            name: true,
+            price: true,
+            slug: true,
+            images: true,
+            category: {
+                select: {
+                    name: true,
+                    slug: true,
+                }
+            }
+        },
         orderBy,
         take: limit ? Number(limit) : undefined,
-        include: { category: true },
     });
     return res.status(200).json(products);
 }

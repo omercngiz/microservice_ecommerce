@@ -7,11 +7,13 @@ import { Search, X } from "lucide-react";
 interface SearchBarProps {
 	queryKey?: string;
 	placeholder?: string;
+	className?: string;
 }
 
 export function SearchBar({
 	queryKey = "search",
 	placeholder = "Ara...",
+	className,
 }: SearchBarProps) {
 	const router = useRouter();
 	const searchParams = useSearchParams();
@@ -44,7 +46,9 @@ export function SearchBar({
 	};
 
 	return (
-		<div className="relative max-w-md">
+		<div
+			className={`relative max-w-lg w-full rounded-full border border-border bg-background px-4 text-sm text-primary transition-colors hover:border-accent hover:text-accent ${className}`}
+		>
 			<Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-accent" />
 			<input
 				type="text"

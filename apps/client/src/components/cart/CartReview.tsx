@@ -2,62 +2,46 @@
 
 import { Trash2, Plus, Minus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
-interface PlaceholderCartItem {
-	id: string;
-	name: string;
-	price: number;
-	quantity: number;
-}
-
-export const PLACEHOLDER_ITEMS: PlaceholderCartItem[] = [
-	{
-		id: "prod_ULacHwHWRxeqtM",
-		name: "Örnek Ürün 1",
-		price: 2600,
-		quantity: 2,
-	},
-	{
-		id: "prod_ULacmXsMam4HEn",
-		name: "Örnek Ürün 2",
-		price: 12000,
-		quantity: 1,
-	},
-	{
-		id: "prod_ULadyDGU0rPGK5",
-		name: "Örnek Ürün 3",
-		price: 120,
-		quantity: 3,
-	},
-];
+import { useCart } from "@/context/cart-context";
 
 interface CartReviewProps {
 	onNext: () => void;
 }
 
 export default function CartReview({ onNext }: CartReviewProps) {
-	const items = PLACEHOLDER_ITEMS;
-	const totalPrice = items.reduce(
-		(sum, item) => sum + item.price * item.quantity,
-		0,
-	);
+	const { items, removeItem, updateQuantity, clearCart, totalPrice } =
+		useCart();
 
 	return (
 		<div className="flex flex-col gap-4">
+			{items.length === 0 && (
+				<p className="py-12 text-center text-muted">Sepetiniz boş.</p>
+			)}
 			{items.map((item) => (
 				<div
-					key={item.id}
+					key={item.product.id}
 					className="flex gap-4 rounded-xl border border-border bg-background p-4"
 				>
-					{/* Placeholder Image */}
-					<div className="h-24 w-24 shrink-0 rounded-lg bg-border" />
+					{/* Image */}
+					<div className="h-24 shrink-0 bg-border overflow-hidden">
+						{item.product.images[0] && (
+							// eslint-disable-next-line @next/next/no-img-element
+							<img
+								src={item.product.images[0]}
+								alt={item.product.name}
+								className="h-full w-full object-cover"
+							/>
+						)}
+					</div>
 
 					{/* Info */}
 					<div className="flex flex-1 flex-col justify-between">
 						<div>
-							<p className="text-sm font-bold text-primary">{item.name}</p>
+							<p className="text-sm font-bold text-primary">
+								{item.product.name}
+							</p>
 							<p className="mt-0.5 text-sm text-muted">
-								${(item.price / 100).toFixed(2)}
+								₺{item.product.price.toFixed(2)}
 							</p>
 						</div>
 
@@ -65,6 +49,9 @@ export default function CartReview({ onNext }: CartReviewProps) {
 						<div className="mt-2 flex items-center gap-3">
 							<div className="flex items-center gap-1">
 								<button
+									onClick={() =>
+										updateQuantity(item.product.id, item.quantity - 1)
+									}
 									className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted transition-colors hover:bg-surface hover:text-primary"
 									aria-label="Miktarı azalt"
 								>
@@ -74,6 +61,9 @@ export default function CartReview({ onNext }: CartReviewProps) {
 									{item.quantity}
 								</span>
 								<button
+									onClick={() =>
+										updateQuantity(item.product.id, item.quantity + 1)
+									}
 									className="flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted transition-colors hover:bg-surface hover:text-primary"
 									aria-label="Miktarı artır"
 								>
@@ -82,6 +72,7 @@ export default function CartReview({ onNext }: CartReviewProps) {
 							</div>
 
 							<button
+								onClick={() => removeItem(item.product.id)}
 								className="flex h-8 w-8 items-center justify-center rounded-lg text-muted transition-colors hover:text-red-500"
 								aria-label="Ürünü kaldır"
 							>
@@ -93,29 +84,35 @@ export default function CartReview({ onNext }: CartReviewProps) {
 					{/* Line Total */}
 					<div className="flex items-start">
 						<p className="text-sm font-bold text-primary">
-							${((item.price * item.quantity) / 100).toFixed(2)}
+							₺{(item.product.price * item.quantity).toFixed(2)}
 						</p>
 					</div>
 				</div>
 			))}
 
 			{/* Summary */}
-			<div className="mt-4 rounded-xl border border-border bg-background p-6">
-				<div className="flex items-center justify-between">
-					<span className="text-sm text-muted">Toplam</span>
-					<span className="text-2xl font-bold text-primary">
-						${(totalPrice / 100).toFixed(2)}
-					</span>
+			{items.length > 0 && (
+				<div className="mt-4 rounded-xl border border-border bg-background p-6">
+					<div className="flex items-center justify-between">
+						<span className="text-sm text-muted">Toplam</span>
+						<span className="text-2xl font-bold text-primary">
+							₺{totalPrice.toFixed(2)}
+						</span>
+					</div>
+					<div className="mt-6 flex flex-col gap-3 sm:flex-row">
+						<Button onClick={onNext} className="flex-1">
+							Adres Bilgilerine Geç
+						</Button>
+						<Button
+							onClick={clearCart}
+							variant="ghost"
+							className="text-muted hover:text-red-500"
+						>
+							Sepeti Temizle
+						</Button>
+					</div>
 				</div>
-				<div className="mt-6 flex flex-col gap-3 sm:flex-row">
-					<Button onClick={onNext} className="flex-1">
-						Adres Bilgilerine Geç
-					</Button>
-					<Button variant="ghost" className="text-muted hover:text-red-500">
-						Sepeti Temizle
-					</Button>
-				</div>
-			</div>
+			)}
 		</div>
 	);
 }

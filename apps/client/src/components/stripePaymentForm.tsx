@@ -8,7 +8,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { Button } from "./ui/button";
 import { useAuth } from "@clerk/nextjs";
-import { PLACEHOLDER_ITEMS } from "./cart/CartReview";
+import { useCart } from "@/context/cart-context";
 
 interface StripePaymentFormProps {
 	onBack: () => void;
@@ -19,6 +19,7 @@ const stripePromise = loadStripe(
 );
 
 const StripePaymentForm = ({ onBack }: StripePaymentFormProps) => {
+	const { items } = useCart();
 	const fetchClientSecret = React.useCallback(async (token: string) => {
 		// Create a Checkout Session
 		return fetch(
@@ -29,7 +30,13 @@ const StripePaymentForm = ({ onBack }: StripePaymentFormProps) => {
 					Authorization: `Bearer ${token}`,
 					"Content-Type": "application/json",
 				},
-				body: JSON.stringify({ cart: PLACEHOLDER_ITEMS }),
+				body: JSON.stringify({
+					cart: items.map((item) => ({
+						id: item.product.id,
+						name: item.product.name,
+						quantity: item.quantity,
+					})),
+				}),
 			},
 		)
 			.then((res) => res.json())

@@ -5,9 +5,7 @@ interface ItemPanelProps {
 
 export function ItemPanel({ children, className }: ItemPanelProps) {
 	return (
-		<div
-			className={`grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 ${className}`}
-		>
+		<div className={`flex flex-col lg:grid gap-4 lg:grid-cols-2 ${className}`}>
 			{children}
 		</div>
 	);

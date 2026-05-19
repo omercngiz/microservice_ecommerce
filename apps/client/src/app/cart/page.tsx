@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { Check } from "lucide-react";
 import PageBanner from "@/components/pageBanner";
 import CartReview from "@/components/cart/CartReview";
@@ -33,14 +33,14 @@ export default function CartPage() {
 			{/* Stepper */}
 			<section className="border-t border-border bg-surface">
 				<div className="mx-auto max-w-3xl px-4 pt-10">
-					<div className="flex items-center justify-between">
+					<div className="flex items-start">
 						{STEPS.map((step, index) => {
 							const isCompleted = index < currentStep;
 							const isActive = index === currentStep;
 
 							return (
-								<div key={step.label} className="flex flex-1 items-center">
-									{/* Circle */}
+								<Fragment key={step.label}>
+									{/* Circle + label */}
 									<div className="flex flex-col items-center gap-1.5">
 										<div
 											className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-semibold transition-colors ${
@@ -69,12 +69,12 @@ export default function CartPage() {
 									{/* Connector line */}
 									{index < STEPS.length - 1 && (
 										<div
-											className={`mx-3 h-0.5 flex-1 rounded-full transition-colors ${
+											className={`mt-[18px] mx-3 h-0.5 flex-1 rounded-full transition-colors ${
 												isCompleted ? "bg-accent" : "bg-border"
 											}`}
 										/>
 									)}
-								</div>
+								</Fragment>
 							);
 						})}
 					</div>
