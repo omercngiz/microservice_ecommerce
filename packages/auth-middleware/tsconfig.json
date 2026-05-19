@@ -1,0 +1,6 @@
+{
+	"extends": "@digitalocean/typescript-config/base.json",
+	"compilerOptions": {
+		"types": ["node"]
+	}
+}
