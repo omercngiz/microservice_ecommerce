@@ -2,7 +2,7 @@ import axios from 'axios';
 import { tokenStore } from './token-store';
 
 export const api = axios.create({
-  baseURL: 'http://localhost:8003',
+  baseURL: 'http://localhost:8080',
   withCredentials: true, // Refresh token httpOnly cookie için gerekli
   headers: {
     'Content-Type': 'application/json',

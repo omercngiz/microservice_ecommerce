@@ -14,17 +14,14 @@
 	"license": "ISC",
 	"packageManager": "pnpm@10.32.1",
 	"dependencies": {
-		"@clerk/express": "^2.1.0",
-		"cors": "^2.8.6",
-		"express": "^5.2.1",
+		"@digitalocean/kafka": "workspace:*",
 		"@digitalocean/product-db": "workspace:*",
-		"@digitalocean/kafka": "workspace:*"
+		"express": "^5.2.1"
 	},
 	"devDependencies": {
 		"@digitalocean/eslint-config": "workspace:*",
-		"@digitalocean/typescript-config": "workspace:*",
 		"@digitalocean/types": "workspace:*",
-		"@types/cors": "^2.8.19",
+		"@digitalocean/typescript-config": "workspace:*",
 		"@types/express": "^5.0.6",
 		"eslint": "^9.0.0",
 		"typescript": "^5.7.0"

@@ -1,16 +1,11 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
-import { cors } from "hono/cors";
 import { producer, consumer } from "./utils/kafka.js";
 import { runKafkaSubscribtions } from "./utils/subscriptions.js";
 import { stripeRoute } from "./stripe/routes/routes.js";
 //import { iyzicoRoute } from "./iyzico/routes/routes.js";
 
 const app = new Hono();
-
-app.use("*", cors({
-  origin: ["http://localhost:3001"]
-}));
 
 app.route("/stripe", stripeRoute);
 //app.route("/iyzico", iyzicoRoute);

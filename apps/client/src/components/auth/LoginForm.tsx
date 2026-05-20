@@ -27,8 +27,8 @@ export function LoginForm() {
 			const { accessToken, user } = await loginAPI(email, password);
 			setAuth(user, accessToken);
 			router.push("/");
-		} catch {
-			setError("E-posta veya şifre hatalı.");
+		} catch (error) {
+			setError(`E-posta veya şifre hatalı. ${error}`);
 		} finally {
 			setLoading(false);
 		}
