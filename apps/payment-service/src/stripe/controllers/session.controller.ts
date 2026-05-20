@@ -1,20 +1,16 @@
-import { Hono } from "hono";
+import type { Context } from "hono";
+import type { TypedResponse } from "hono";
 import stripe from "../utils/stripe.js";
-import { shouldBeUser } from "../middleware/auth";
 import { getStripeProductPrice } from "../utils/stripeProduct.js";
 
-const sessionRoute = new Hono();
-
-sessionRoute.post("/create-checkout-session", shouldBeUser, async (c) => {
-    console.log("[DEBUG] [session/create-checkout-session] Endpoint hit");
-    
+export const createCheckoutSession = async (c: Context) => {
     const { cart } = await c.req.json();
     console.log("Received cart: ", cart);
     const userId = c.get("userId") as string;
 
     const lineItems = await Promise.all(
         cart.map(async (item: { id: string; name: string; quantity: number }) => {
-            const unitAmount =  await getStripeProductPrice(item.id);
+            const unitAmount = await getStripeProductPrice(item.id);
             return {
                 price_data: {
                     currency: 'usd',
@@ -22,9 +18,9 @@ sessionRoute.post("/create-checkout-session", shouldBeUser, async (c) => {
                         name: item.name,
                     },
                     unit_amount: unitAmount as number,
-                    },
+                },
                 quantity: item.quantity,
-            }
+            };
         })
     );
 
@@ -36,10 +32,10 @@ sessionRoute.post("/create-checkout-session", shouldBeUser, async (c) => {
         return_url: `${process.env.STRIPE_RETURN_URL}?session_id={CHECKOUT_SESSION_ID}`,
     });
     console.log(lineItems);
-    return c.json({ clientSecret: session.client_secret});
-});
+    return c.json({ clientSecret: session.client_secret });
+};
 
-sessionRoute.get("/:session_id", async (c) => {
+export const getCheckoutSession = async (c: Context): Promise<TypedResponse<{ status: string | null; paymentStatus: string }>> => {
     console.log("[DEBUG] [session/:session_id] Endpoint hit");
 
     const { session_id } = c.req.param();
@@ -53,6 +49,4 @@ sessionRoute.get("/:session_id", async (c) => {
         status: session.status,
         paymentStatus: session.payment_status,
     });
-});
-
-export { sessionRoute };
+};

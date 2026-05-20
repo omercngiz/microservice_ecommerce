@@ -1,3 +1,6 @@
 {
-    "extends": "@digitalocean/typescript-config/base.json"
+	"extends": "@digitalocean/typescript-config/base.json",
+	"compilerOptions": {
+		"verbatimModuleSyntax": false
+	}
 }

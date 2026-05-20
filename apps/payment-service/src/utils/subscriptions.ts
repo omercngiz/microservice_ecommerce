@@ -1,5 +1,5 @@
 import { consumer } from "./kafka.js";
-import { createStripeProduct, deleteStripeProduct } from "./stripeProduct.js";
+import { createStripeProduct, deleteStripeProduct } from "../stripe/utils/stripeProduct";
 
 export const runKafkaSubscribtions = async () => {
     consumer.subscribe("product.created", async (message) => {

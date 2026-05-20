@@ -1,7 +1,6 @@
-import express, { NextFunction, Request, Response } from 'express';
+import express from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
-import { clerkMiddleware } from '@clerk/express';
-import { shouldBeUser } from './middleware/auth';
 import productRouter from './routes/product.route';
 import categoryRouter from './routes/category.route';
 import { producer, consumer } from './utils/kafka';
@@ -14,7 +13,6 @@ app.use(cors({
     credentials: true
 }))
 app.use(express.json());
-app.use(clerkMiddleware());
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
@@ -29,10 +27,6 @@ app.get('/health', (req:Request, res:Response) => {
     uptime: process.uptime(),
     timeStamp: new Date().toISOString(),
   });
-});
-
-app.get('/test', shouldBeUser, (req:Request, res:Response) => {
-  res.json({ message: 'Authenticated!', userId: req.userId });
 });
 
 const start = async () => {

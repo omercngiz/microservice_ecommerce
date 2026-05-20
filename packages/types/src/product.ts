@@ -1,4 +1,4 @@
-import { Product, Category } from "@digitalocean/product-db";
+import type { Product, Category } from "@digitalocean/product-db";
 
 export type ProductType = Product;
 export type ProductsType = Product[];

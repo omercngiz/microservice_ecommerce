@@ -1,5 +1,5 @@
 import stripe from "./stripe.js";
-import { StripeProductType } from "@digitalocean/types";
+import type { StripeProductType } from "@digitalocean/types";
 
 export const createStripeProduct = async (item: StripeProductType) => {
     try {

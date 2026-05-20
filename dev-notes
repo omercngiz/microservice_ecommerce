@@ -1,5 +1,6 @@
 For start up in development env \
  \* Start docker kafka image
+ \* Start docker postgres for auth and product services.
 
     Payment Service 
         * Start ngrok for stripe webhook
@@ -10,3 +11,10 @@ For start up in development env \
 
     Order service
         * Start mongodb using cloude.mongodb.com -> omer.my.acc
+
+Yapılacaklar
+    İyzico entegre edilecek.
+    Mail servisi eklenecek.
+    Order oluşturma akışı tamamlanacak.
+        Olası ödeme durumlarının hepsi yazılacak ve test edilecek (successful, pending, fail, vs)
+    Kargo entegre edilecek.

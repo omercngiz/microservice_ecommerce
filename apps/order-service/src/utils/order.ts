@@ -1,4 +1,4 @@
-import { OrderType } from "@digitalocean/types";
+import type { OrderType } from "@digitalocean/types";
 import { Order } from "@digitalocean/order-db";
 
 export const createOrder = async (order: OrderType) => {

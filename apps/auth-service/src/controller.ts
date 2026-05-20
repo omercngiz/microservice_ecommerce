@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { registerSchema } from './schemas';
 import * as argon2 from 'argon2';
 import { prisma } from '@digitalocean/auth-db'; 

@@ -1,4 +1,4 @@
-import { Product } from "@digitalocean/product-db";
+import type { Product } from "@digitalocean/product-db";
 
 export type CartItemType = {
     quantity: number;

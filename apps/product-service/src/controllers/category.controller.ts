@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { Prisma, prisma } from '@digitalocean/product-db';
 
 export const createCategory = async (req: Request, res: Response) => {

@@ -1,19 +1,17 @@
-import { Hono } from "hono";
-import stripe from "../utils/stripe";
+import type { Context } from "hono";
+import stripe from "../utils/stripe.js";
 import Stripe from "stripe";
-import { producer } from "../utils/kafka";
-
-const webhooksRoute = new Hono();
+import { producer } from "../../utils/kafka.js";
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
 
-webhooksRoute.post("/stripe", async (c) => {
+export const handleStripeWebhook = async (c: Context) => {
     console.log("[DEBUG] [webhooks/stripe] Endpoint hit");
 
     const body = await c.req.text();
     const signature = c.req.header("stripe-signature") as string;
 
-    let event : Stripe.Event;
+    let event: Stripe.Event;
 
     try {
         event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
@@ -24,10 +22,9 @@ webhooksRoute.post("/stripe", async (c) => {
     }
 
     switch (event.type) {
-        case "checkout.session.completed":{
+        case "checkout.session.completed": {
             const session = event.data.object as Stripe.Checkout.Session;
             const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
-            // TODO: create order
             console.log("[DEBUG] [webhooks/stripe] checkout.session.completed Session: ", session);
             producer.send("payment.successful", {
                 value: {
@@ -39,11 +36,10 @@ webhooksRoute.post("/stripe", async (c) => {
                     products: lineItems.data.map((item) => ({
                         name: item.description,
                         quantity: item.quantity,
-                        price: item.price?.unit_amount
-                    }))
-                }
+                        price: item.price?.unit_amount,
+                    })),
+                },
             });
-
             console.log("[DEBUG] [webhooks/stripe] WEBHOOK RECEIVED: ", session, lineItems);
             break;
         }
@@ -52,6 +48,4 @@ webhooksRoute.post("/stripe", async (c) => {
     }
 
     return c.json({ received: true });
-});
-
-export { webhooksRoute };
+};

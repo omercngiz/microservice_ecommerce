@@ -4,8 +4,12 @@ let isConnected = false;
 const connectOrderDB = async () => {
     if (isConnected) return;
     
+    if (!process.env.MONGO_URL) {
+        throw new Error('MONGO_URL environment variable is not set');
+    }
+    
     try {
-        await mongoose.connect(process.env.MONGO_URL || '');
+        await mongoose.connect(process.env.MONGO_URL);
         isConnected = true;
         console.log('Connected to Order Database');
     } catch (error) {
