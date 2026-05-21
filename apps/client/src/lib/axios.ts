@@ -1,8 +1,10 @@
 import axios from 'axios';
 import { tokenStore } from './token-store';
 
+const API_GATEWAY_URL = process.env.NEXT_PUBLIC_API_GATEWAY_URL;
+
 export const api = axios.create({
-  baseURL: 'http://localhost:8080',
+  baseURL: API_GATEWAY_URL, // API Gateway URL
   withCredentials: true, // Refresh token httpOnly cookie için gerekli
   headers: {
     'Content-Type': 'application/json',

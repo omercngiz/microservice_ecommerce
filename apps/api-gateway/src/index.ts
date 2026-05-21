@@ -15,6 +15,27 @@ server.register(cors, {
     allowedHeaders: ['Content-Type', 'Authorization']
 });
 
+// CORS debug: gelen request header'larını logla
+server.addHook('onRequest', async (request, _reply) => {
+  console.log('\n[CORS-DEBUG] → Gelen İstek');
+  console.log('  method :', request.method);
+  console.log('  url    :', request.url);
+  console.log('  origin :', request.headers.origin ?? '(yok)');
+  console.log('  acr-method  :', request.headers['access-control-request-method'] ?? '(yok)');
+  console.log('  acr-headers :', request.headers['access-control-request-headers'] ?? '(yok)');
+});
+
+// CORS debug: giden response header'larını logla
+server.addHook('onSend', async (request, reply, payload) => {
+  console.log('\n[CORS-DEBUG] ← Giden Yanıt');
+  console.log('  url         :', request.url);
+  console.log('  status      :', reply.statusCode);
+  console.log('  acao        :', reply.getHeader('access-control-allow-origin') ?? '(yok)');
+  console.log('  acac        :', reply.getHeader('access-control-allow-credentials') ?? '(yok)');
+  console.log('  acam        :', reply.getHeader('access-control-allow-methods') ?? '(yok)');
+  return payload;
+});
+
 server.register(httpProxy, {
     upstream: process.env.AUTH_SERVICE_URL as string,
     prefix: '/auth',
@@ -52,7 +73,7 @@ server.register(httpProxy, {
 // 4. Sunucuyu Ayağa Kaldır
 const start = async () => {
     try {
-        const port = Number(process.env.PORT) || 8080;
+        const port = Number(process.env.PORT) || 8180;
         await server.listen({ port, host: '0.0.0.0' });
         console.log(`🚀 API Gateway ${port} portunda güvenle çalışıyor...`);
     } catch (err) {
