@@ -1,11 +1,10 @@
-import { Hono } from "hono";
-import { sessionRoute } from "./session.route";
-import { webhooksRoute } from "./webhooks.route";
+import { Router } from "express";
+import { sessionRoute } from "./session.route.js";
+import { webhooksRoute } from "./webhooks.route.js";
 
+const stripeRoute: ReturnType<typeof Router> = Router();
 
-const stripeRoute = new Hono();
-
-stripeRoute.route("/session", sessionRoute);
-stripeRoute.route("/webhooks", webhooksRoute);
+stripeRoute.use("/session", sessionRoute);
+stripeRoute.use("/webhooks", webhooksRoute);
 
 export { stripeRoute };

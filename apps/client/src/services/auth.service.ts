@@ -21,3 +21,13 @@ export const refreshAPI = async (): Promise<{
 export const logoutAPI = async (): Promise<void> => {
   await api.post('/auth/logout');
 };
+
+export const registerAPI = async (data: {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  phone?: string;
+}): Promise<void> => {
+  await api.post('/auth/register', data);
+};

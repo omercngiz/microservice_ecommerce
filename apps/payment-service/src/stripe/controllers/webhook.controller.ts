@@ -1,15 +1,15 @@
-import type { Context } from "hono";
+import type { Request, Response } from "express";
 import stripe from "../utils/stripe.js";
 import Stripe from "stripe";
 import { producer } from "../../utils/kafka.js";
 
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
 
-export const handleStripeWebhook = async (c: Context) => {
+export const handleStripeWebhook = async (req: Request, res: Response) => {
     console.log("[DEBUG] [webhooks/stripe] Endpoint hit");
 
-    const body = await c.req.text();
-    const signature = c.req.header("stripe-signature") as string;
+    const body = req.body as Buffer;
+    const signature = req.headers["stripe-signature"] as string;
 
     let event: Stripe.Event;
 
@@ -18,7 +18,8 @@ export const handleStripeWebhook = async (c: Context) => {
     } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
         console.log("[ERROR] [webhooks/stripe] Webhook signature verification failed.", message);
-        return c.text("Webhook Error: " + message, 400);
+        res.status(400).send("Webhook Error: " + message);
+        return;
     }
 
     switch (event.type) {
@@ -47,5 +48,5 @@ export const handleStripeWebhook = async (c: Context) => {
             break;
     }
 
-    return c.json({ received: true });
+    res.json({ received: true });
 };

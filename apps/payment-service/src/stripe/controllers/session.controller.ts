@@ -1,12 +1,11 @@
-import type { Context } from "hono";
-import type { TypedResponse } from "hono";
+import type { Request, Response } from "express";
 import stripe from "../utils/stripe.js";
 import { getStripeProductPrice } from "../utils/stripeProduct.js";
 
-export const createCheckoutSession = async (c: Context) => {
-    const { cart } = await c.req.json();
+export const createCheckoutSession = async (req: Request, res: Response) => {
+    const { cart } = req.body;
     console.log("Received cart: ", cart);
-    const userId = c.get("userId") as string;
+    const userId = req.headers['x-user-id'] as string;
 
     const lineItems = await Promise.all(
         cart.map(async (item: { id: string; name: string; quantity: number }) => {
@@ -32,20 +31,20 @@ export const createCheckoutSession = async (c: Context) => {
         return_url: `${process.env.STRIPE_RETURN_URL}?session_id={CHECKOUT_SESSION_ID}`,
     });
     console.log(lineItems);
-    return c.json({ clientSecret: session.client_secret });
+    res.json({ clientSecret: session.client_secret });
 };
 
-export const getCheckoutSession = async (c: Context): Promise<TypedResponse<{ status: string | null; paymentStatus: string }>> => {
+export const getCheckoutSession = async (req: Request, res: Response) => {
     console.log("[DEBUG] [session/:session_id] Endpoint hit");
 
-    const { session_id } = c.req.param();
+    const { session_id } = req.params;
     const session = await stripe.checkout.sessions.retrieve(
         session_id as string,
         {
             expand: ["line_items"],
         }
     );
-    return c.json({
+    res.json({
         status: session.status,
         paymentStatus: session.payment_status,
     });
