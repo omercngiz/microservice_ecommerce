@@ -9,7 +9,7 @@ const server = Fastify({ logger: true });
 
 // 2. CORS Ayarları (Sadece Frontend'e izin veriyoruz)
 server.register(cors, {
-    origin: 'http://localhost:3001', 
+    origin: process.env.CLIENT_SERVICE_URL as string,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
