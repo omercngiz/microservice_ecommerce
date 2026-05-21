@@ -1,4 +1,4 @@
-import { Consumer, Kafka } from "kafkajs";
+import { type Consumer, Kafka } from "kafkajs";
 
 export const createKafkaConsumer = ( kafka: Kafka, groupId: string ) => {
     const consumer: Consumer = kafka.consumer({ groupId });

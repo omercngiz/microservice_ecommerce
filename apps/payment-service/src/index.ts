@@ -2,6 +2,7 @@ import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { producer, consumer } from "./utils/kafka.js";
 import { runKafkaSubscribtions } from "./utils/subscriptions.js";
+import { customLogger } from "@digitalocean/logger";
 import { stripeRoute } from "./stripe/routes/routes.js";
 //import { iyzicoRoute } from "./iyzico/routes/routes.js";
 
@@ -26,16 +27,16 @@ const start = async () => {
     serve(
       {
         fetch: app.fetch,
-        port: 8002,
+        port: process.env.PORT! as unknown as number,
       },
       (info) => {
-        console.log(
+        customLogger.info(
           `Payment service is running on http://localhost:${info.port}`,
         );
       },
     );
   } catch (error) {
-    console.error("Error starting the server:", error);
+    customLogger.error("Error starting the server:", error);
     process.exit(1);
   }
 };

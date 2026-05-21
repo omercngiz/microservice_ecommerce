@@ -5,7 +5,18 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const server = Fastify({ logger: true });
+const server = Fastify({ 
+    logger: {
+    transport: {
+      target: 'pino-pretty',
+      options: {
+        translateTime: 'HH:MM:ss Z', // Human-readable timestamps
+        ignore: 'pid,hostname',      // Remove noisy fields
+        colorize: true                // Add colors
+      }
+    }
+  } 
+});
 
 // 2. CORS Ayarları (Sadece Frontend'e izin veriyoruz)
 server.register(cors, {
@@ -52,7 +63,7 @@ server.register(httpProxy, {
 // 4. Sunucuyu Ayağa Kaldır
 const start = async () => {
     try {
-        const port = Number(process.env.PORT) || 8180;
+        const port = Number(process.env.PORT);
         await server.listen({ port, host: '0.0.0.0' });
         console.log(`🚀 API Gateway ${port} portunda güvenle çalışıyor...`);
     } catch (err) {

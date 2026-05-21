@@ -1,4 +1,4 @@
-import { Kafka, Producer } from "kafkajs";
+import { Kafka, type Producer } from "kafkajs";
 
 export const createKafkaProducer = ( kafka: Kafka ) => {
     const producer: Producer = kafka.producer();

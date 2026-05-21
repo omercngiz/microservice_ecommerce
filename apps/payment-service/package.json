@@ -10,6 +10,7 @@
 	"dependencies": {
 		"@digitalocean/kafka": "workspace:*",
 		"@hono/node-server": "^1.19.12",
+		"@digitalocean/logger": "workspace:*",
 		"hono": "^4.12.9",
 		"stripe": "^22.0.1"
 	},

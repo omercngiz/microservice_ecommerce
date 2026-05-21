@@ -3,13 +3,14 @@ import type { NextFunction, Request, Response } from 'express';
 import productRouter from './routes/product.route';
 import categoryRouter from './routes/category.route';
 import { producer, consumer } from './utils/kafka';
+import { customLogger } from '@digitalocean/logger';
 
 const app = express();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT;
 
 app.use(express.json());
 app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
-    console.error(error);
+    customLogger.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
 });
 
@@ -28,10 +29,10 @@ const start = async () => {
   try {
     await Promise.all([consumer.connect(), producer.connect()]);
     app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+      customLogger.info(`Server is running on port ${PORT}`);
     });
   } catch (error) {
-    console.error('Failed to connect to Kafka:', error);
+    customLogger.error('Failed to connect to Kafka:', error);
     process.exit(1);
   } 
 }
