@@ -2,6 +2,7 @@ import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import httpProxy from '@fastify/http-proxy';
 import dotenv from 'dotenv';
+import { customLogger } from '@digitalocean/logger';
 
 dotenv.config();
 
@@ -65,9 +66,9 @@ const start = async () => {
     try {
         const port = Number(process.env.PORT);
         await server.listen({ port, host: '0.0.0.0' });
-        console.log(`🚀 API Gateway ${port} portunda güvenle çalışıyor...`);
+        customLogger.info(`🚀 API Gateway ${port} portunda güvenle çalışıyor...`);
     } catch (err) {
-        server.log.error(err);
+        customLogger.error(err);
         process.exit(1);
     }
 };
