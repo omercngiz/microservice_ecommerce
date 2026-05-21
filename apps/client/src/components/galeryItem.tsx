@@ -20,6 +20,7 @@ export default function GaleryItem({ product }: { product: CartProduct }) {
 					className="object-cover transition-transform duration-300"
 					width={1280}
 					height={720}
+					priority
 				/>
 			</Link>
 

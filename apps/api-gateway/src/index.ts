@@ -11,6 +11,8 @@ const server = Fastify({ logger: true });
 server.register(cors, {
     origin: 'http://localhost:3001', 
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 });
 
 server.register(httpProxy, {
@@ -18,12 +20,7 @@ server.register(httpProxy, {
     prefix: '/auth',
     replyOptions: {
         // Bu kısım arkadaki servisten gelen hataları olduğu gibi frontend'e iletir
-        rewriteRequestHeaders: (originalReq, headers) => headers,
-        rewriteHeaders: (headers) => {
-            delete headers['access-control-allow-origin'];
-            delete headers['access-control-allow-credentials'];
-            return headers;
-        }
+        rewriteRequestHeaders: (originalReq, headers) => headers
   }
 });
 

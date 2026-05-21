@@ -1,29 +1,34 @@
-import { auth } from "@clerk/nextjs/server";
-
 const TestPage = async () => {
-	const { getToken } = await auth();
-	const token = await getToken();
-
+	const token = localStorage.getItem("accessToken");
 	console.log("Token:", token);
-	const productServiceResponse = await fetch("http://localhost:8000/test", {
-		headers: {
-			Authorization: `Bearer ${token}`,
+	const productServiceResponse = await fetch(
+		process.env.NEXT_PUBLIC_API_GATEWAY_URL + "/product/test",
+		{
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
 		},
-	});
+	);
 	const productServiceData = await productServiceResponse.json();
 
-	const orderServiceResponse = await fetch("http://localhost:8001/test", {
-		headers: {
-			Authorization: `Bearer ${token}`,
+	const orderServiceResponse = await fetch(
+		process.env.NEXT_PUBLIC_API_GATEWAY_URL + "/order/test",
+		{
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
 		},
-	});
+	);
 	const orderServiceData = await orderServiceResponse.json();
 
-	const paymentServiceResponse = await fetch("http://localhost:8002/test", {
-		headers: {
-			Authorization: `Bearer ${token}`,
+	const paymentServiceResponse = await fetch(
+		process.env.NEXT_PUBLIC_API_GATEWAY_URL + "/payment/test",
+		{
+			headers: {
+				Authorization: `Bearer ${token}`,
+			},
 		},
-	});
+	);
 	const paymentServiceData = await paymentServiceResponse.json();
 
 	return (

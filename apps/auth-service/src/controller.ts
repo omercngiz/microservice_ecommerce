@@ -161,9 +161,16 @@ export const refreshTokenController = async (req: Request, res: Response) => {
       { expiresIn: '15m' }
     );
 
-    // 5. Yeni token'ı frontend'e teslim et
+    // 5. Yeni token'ı ve kullanıcı bilgilerini frontend'e teslim et
     return res.status(200).json({ 
-      accessToken: newAccessToken 
+      accessToken: newAccessToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role
+      }
     });
 
   } catch (error) {

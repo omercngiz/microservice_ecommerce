@@ -7,7 +7,6 @@ import {
 	EmbeddedCheckout,
 } from "@stripe/react-stripe-js";
 import { Button } from "./ui/button";
-import { useAuth } from "@clerk/nextjs";
 import { useCart } from "@/context/cart-context";
 
 interface StripePaymentFormProps {
@@ -20,43 +19,43 @@ const stripePromise = loadStripe(
 
 const StripePaymentForm = ({ onBack }: StripePaymentFormProps) => {
 	const { items } = useCart();
-	const fetchClientSecret = React.useCallback(async (token: string) => {
-		// Create a Checkout Session
-		return fetch(
-			`${process.env.NEXT_PUBLIC_PAYMENT_SERVICE_URL}/session/create-checkout-session`,
-			{
-				method: "POST",
-				headers: {
-					Authorization: `Bearer ${token}`,
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					cart: items.map((item) => ({
-						id: item.product.id,
-						name: item.product.name,
-						quantity: item.quantity,
-					})),
-				}),
-			},
-		)
-			.then((res) => res.json())
-			.then((data) => data.clientSecret);
-	}, []);
+	//const fetchClientSecret = React.useCallback(async (token: string) => {
+	// Create a Checkout Session
+	// return fetch(
+	// 	`${process.env.NEXT_PUBLIC_PAYMENT_SERVICE_URL}/session/create-checkout-session`,
+	// 	{
+	// 		method: "POST",
+	// 		headers: {
+	// 			Authorization: `Bearer ${token}`,
+	// 			"Content-Type": "application/json",
+	// 		},
+	// 		body: JSON.stringify({
+	// 			cart: items.map((item) => ({
+	// 				id: item.product.id,
+	// 				name: item.product.name,
+	// 				quantity: item.quantity,
+	// 			})),
+	// 		}),
+	// 	},
+	// )
+	// 		.then((res) => res.json())
+	// 		.then((data) => data.clientSecret);
+	// }, []);
 
 	const [token, setToken] = React.useState<string | null>(null);
-	const { getToken } = useAuth();
 
 	React.useEffect(() => {
-		getToken().then((token) => setToken(token));
+		const token = localStorage.getItem("accessToken");
+		setToken(token);
 	}, []);
 
 	if (!token) {
 		return <p>Loading...</p>;
 	}
 
-	const options = {
-		fetchClientSecret: () => fetchClientSecret(token),
-	};
+	// const options = {
+	// 	fetchClientSecret: () => fetchClientSecret(token),
+	// };
 
 	return (
 		<div id="checkout">
