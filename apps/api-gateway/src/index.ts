@@ -52,7 +52,7 @@ server.register(httpProxy, {
 // 4. Sunucuyu Ayağa Kaldır
 const start = async () => {
     try {
-        const port = Number(process.env.PORT) || 8080;
+        const port = Number(process.env.PORT) || 8180;
         await server.listen({ port, host: '0.0.0.0' });
         console.log(`🚀 API Gateway ${port} portunda güvenle çalışıyor...`);
     } catch (err) {
