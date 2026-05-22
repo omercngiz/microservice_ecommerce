@@ -11,7 +11,7 @@ export const createStripeProduct = async (item: StripeProductType) => {
             description: item.description,
             default_price_data: {
                 currency: "usd",
-                unit_amount: item.price,
+                unit_amount: Math.round(item.price * 100),
             },
         });
         return product;

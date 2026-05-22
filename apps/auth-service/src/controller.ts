@@ -193,7 +193,8 @@ export const logoutController = (req: Request, res: Response) => {
 
 export const getMeController = async (req: Request, res: Response) => {
   try {
-    // req.user, az önce yazdığımız middleware'den geliyor!
+    // userId, API Gateway tarafından HMAC doğrulamalı x-user-id header'ından gelir;
+    // verifyHmac middleware'i bunu req.user'a yazıyor.
     const userId = req.user?.id;
 
     // Kullanıcının güncel bilgilerini veritabanından çekiyoruz (Şifreyi hariç tutarak)

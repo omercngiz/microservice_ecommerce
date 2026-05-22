@@ -1,13 +1,22 @@
-import type { FastifyRequest, FastifyReply } from "fastify";
+import type { Request, Response } from "express";
 import { Order } from "@digitalocean/order-db";
 
-export const getUserOrders = async (request: FastifyRequest, reply: FastifyReply) => {
-    console.log("User ID from request:", request.userId);
-    const orders = await Order.find({ userId: request.userId });
-    return reply.send({ message: "userID", userId: request.userId, orders });
+export const getUserOrders = async (req: Request, res: Response) => {
+    const userId = req.user?.id;
+
+    if (!userId) {
+        return res.status(401).json({ error: "Kullanıcı kimliği doğrulanamadı." });
+    }
+
+    const orders = await Order.find({ userId });
+    res.json({ orders });
 };
 
-export const getAllOrders = async (request: FastifyRequest, reply: FastifyReply) => {
+export const getAllOrders = async (req: Request, res: Response) => {
+    if (req.user?.role !== 'ADMIN') {
+        return res.status(403).json({ error: "Bu işleme yalnızca admin erişebilir." });
+    }
+
     const orders = await Order.find();
-    return reply.send(orders);
+    res.json({ orders });
 };

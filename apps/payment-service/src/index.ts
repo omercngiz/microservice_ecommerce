@@ -1,4 +1,5 @@
 import express from "express";
+import type { NextFunction, Request, Response } from "express";
 import { producer, consumer } from "./utils/kafka.js";
 import { runKafkaSubscribtions } from "./utils/subscriptions.js";
 import { customLogger } from "@digitalocean/logger";
@@ -24,6 +25,13 @@ app.get("/health", (req, res) => {
   });
 });
 
+// Global JSON hata yöneticisi — tüm controller hataları JSON olarak döner
+app.use((err: Error, req: Request, res: Response, _next: NextFunction) => {
+  customLogger.error({ err }, "Unhandled error in payment-service");
+  const status = (err as NodeJS.ErrnoException & { status?: number }).status ?? 500;
+  res.status(status).json({ error: err.message ?? "Internal server error" });
+});
+
 const start = async () => {
   try {
     await Promise.all([consumer.connect(), producer.connect()]);
@@ -39,3 +47,4 @@ const start = async () => {
   }
 };
 start();
+

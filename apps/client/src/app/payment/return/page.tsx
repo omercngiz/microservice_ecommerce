@@ -12,7 +12,7 @@ const PaymentReturnPage = async ({
 	}
 
 	const res = await fetch(
-		`${process.env.NEXT_PUBLIC_PAYMENT_SERVICE_URL}/session/${session_id}`,
+		`${process.env.NEXT_PUBLIC_API_GATEWAY_URL}/payment/stripe/session/${session_id}`,
 	);
 	const data = await res.json();
 

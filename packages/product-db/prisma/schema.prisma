@@ -48,6 +48,8 @@ model Product {
   createdAt  DateTime      @default(now()) @map("created_at")
   updatedAt  DateTime      @updatedAt @map("updated_at")
 
+  stripeProductId String? @map("stripe_product_id")
+
   @@map("products")
 }
 

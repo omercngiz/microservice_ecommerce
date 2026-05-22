@@ -1,15 +1,35 @@
 import type { Request, Response } from "express";
 import stripe from "../utils/stripe.js";
 import { getStripeProductPrice } from "../utils/stripeProduct.js";
+import { signInternalRequest } from "@digitalocean/hmac-middleware";
 
 export const createCheckoutSession = async (req: Request, res: Response) => {
     const { cart } = req.body;
-    console.log("Received cart: ", cart);
-    const userId = req.headers['x-user-id'] as string;
+    const userId = req.user?.id;
+
+    if (!userId) {
+        return res.status(401).json({ error: "Kullanıcı kimliği doğrulanamadı." });
+    }
 
     const lineItems = await Promise.all(
         cart.map(async (item: { id: string; name: string; quantity: number }) => {
-            const unitAmount = await getStripeProductPrice(item.id);
+            const hmacHeaders = signInternalRequest();
+            const productRes = await fetch(`${process.env.PRODUCT_SERVICE_URL}/products/${item.id}`, {
+                headers: hmacHeaders,
+            });
+            if (!productRes.ok) {
+                throw new Error(`Product not found: ${item.id}`);
+            }
+            const product = await productRes.json() as { stripeProductId?: string };
+
+            if (!product.stripeProductId) {
+                throw new Error(`stripeProductId missing for product: ${item.id}`);
+            }
+
+            const unitAmount = await getStripeProductPrice(product.stripeProductId);
+            if (!unitAmount) {
+                throw new Error(`Could not get price for Stripe product: ${product.stripeProductId}`);
+            }
             return {
                 price_data: {
                     currency: 'usd',

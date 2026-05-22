@@ -15,7 +15,7 @@
 	"packageManager": "pnpm@10.32.1",
 	"dependencies": {
 		"@digitalocean/auth-db": "workspace:*",
-		"@digitalocean/auth-middleware": "workspace:*",
+		"@digitalocean/hmac-middleware": "workspace:*",
 		"@digitalocean/logger": "workspace:*",
 		"argon2": "^0.44.0",
 		"cookie-parser": "^1.4.7",

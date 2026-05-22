@@ -10,7 +10,8 @@
 	"dependencies": {
 		"@digitalocean/kafka": "workspace:*",
 		"@digitalocean/logger": "workspace:*",
-		"express": "^5.1.0",
+		"@digitalocean/hmac-middleware": "workspace:*",
+		"express": "^5.2.1",
 		"stripe": "^22.0.1"
 	},
 	"devDependencies": {

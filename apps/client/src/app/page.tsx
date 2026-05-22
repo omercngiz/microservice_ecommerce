@@ -5,6 +5,8 @@ import { ItemPanel } from "@/components/itemPanel";
 import SearchBar from "@/components/searchBar";
 import SortMenu from "@/components/sortMenu";
 
+const API_GATEWAY_URL = process.env.NEXT_PUBLIC_API_GATEWAY_URL;
+
 interface Category {
 	name: string;
 	slug: string;
@@ -20,7 +22,7 @@ interface Product {
 
 async function getCategories(): Promise<Category[]> {
 	try {
-		const res = await fetch("http://localhost:8000/categories", {
+		const res = await fetch(`${API_GATEWAY_URL}/product/categories`, {
 			next: { revalidate: 0 },
 		});
 		if (!res.ok) return [];
@@ -41,7 +43,7 @@ async function getProducts(params: {
 		if (params.category) query.set("category", params.category);
 		if (params.search) query.set("search", params.search);
 
-		const url = `http://localhost:8000/products${query.toString() ? `?${query}` : ""}`;
+		const url = `${API_GATEWAY_URL}/product/products${query.toString() ? `?${query}` : ""}`;
 		const res = await fetch(url, { next: { revalidate: 0 } });
 		if (!res.ok) return [];
 		return res.json();

@@ -17,9 +17,6 @@ importers:
 
   apps/api-gateway:
     dependencies:
-      '@digitalocean/auth-middleware':
-        specifier: workspace:*
-        version: link:../../packages/auth-middleware
       '@digitalocean/logger':
         specifier: workspace:*
         version: link:../../packages/logger
@@ -63,9 +60,9 @@ importers:
       '@digitalocean/auth-db':
         specifier: workspace:*
         version: link:../../packages/auth-db
-      '@digitalocean/auth-middleware':
+      '@digitalocean/hmac-middleware':
         specifier: workspace:*
-        version: link:../../packages/auth-middleware
+        version: link:../../packages/hmac-middleware
       '@digitalocean/logger':
         specifier: workspace:*
         version: link:../../packages/logger
@@ -206,6 +203,9 @@ importers:
 
   apps/order-service:
     dependencies:
+      '@digitalocean/hmac-middleware':
+        specifier: workspace:*
+        version: link:../../packages/hmac-middleware
       '@digitalocean/kafka':
         specifier: workspace:*
         version: link:../../packages/kafka
@@ -215,9 +215,9 @@ importers:
       '@digitalocean/order-db':
         specifier: workspace:*
         version: link:../../packages/order-db
-      fastify:
-        specifier: ^5.8.4
-        version: 5.8.4
+      express:
+        specifier: ^5.1.0
+        version: 5.2.1
     devDependencies:
       '@digitalocean/eslint-config':
         specifier: workspace:*
@@ -228,15 +228,15 @@ importers:
       '@digitalocean/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
+      '@types/express':
+        specifier: ^5.0.3
+        version: 5.0.6
       '@types/node':
         specifier: ^22.19.15
         version: 22.19.15
       eslint:
         specifier: ^9.0.0
         version: 9.39.4(jiti@2.6.1)
-      pino-pretty:
-        specifier: ^13.1.3
-        version: 13.1.3
       tsx:
         specifier: ^4.21.0
         version: 4.21.0
@@ -246,6 +246,9 @@ importers:
 
   apps/payment-service:
     dependencies:
+      '@digitalocean/hmac-middleware':
+        specifier: workspace:*
+        version: link:../../packages/hmac-middleware
       '@digitalocean/kafka':
         specifier: workspace:*
         version: link:../../packages/kafka
@@ -253,7 +256,7 @@ importers:
         specifier: workspace:*
         version: link:../../packages/logger
       express:
-        specifier: ^5.1.0
+        specifier: ^5.2.1
         version: 5.2.1
       stripe:
         specifier: ^22.0.1
@@ -286,6 +289,9 @@ importers:
 
   apps/product-service:
     dependencies:
+      '@digitalocean/hmac-middleware':
+        specifier: workspace:*
+        version: link:../../packages/hmac-middleware
       '@digitalocean/kafka':
         specifier: workspace:*
         version: link:../../packages/kafka
@@ -352,28 +358,6 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
 
-  packages/auth-middleware:
-    dependencies:
-      express:
-        specifier: ^5.2.1
-        version: 5.2.1
-      jsonwebtoken:
-        specifier: ^9.0.3
-        version: 9.0.3
-    devDependencies:
-      '@digitalocean/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
-      '@types/express':
-        specifier: ^5.0.6
-        version: 5.0.6
-      '@types/jsonwebtoken':
-        specifier: ^9.0.10
-        version: 9.0.10
-      '@types/node':
-        specifier: ^25.9.0
-        version: 25.9.0
-
   packages/eslint-config:
     dependencies:
       '@eslint/js':
@@ -400,6 +384,28 @@ importers:
       typescript-eslint:
         specifier: ^8.0.0
         version: 8.57.2(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)
+
+  packages/hmac-middleware:
+    dependencies:
+      express:
+        specifier: ^5.2.1
+        version: 5.2.1
+    devDependencies:
+      '@digitalocean/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      '@types/express':
+        specifier: ^5.0.6
+        version: 5.0.6
+      '@types/node':
+        specifier: ^25.9.0
+        version: 25.9.1
+      tsx:
+        specifier: ^4.22.3
+        version: 4.22.3
+      typescript:
+        specifier: ^5.7.0
+        version: 5.9.3
 
   packages/kafka:
     dependencies:

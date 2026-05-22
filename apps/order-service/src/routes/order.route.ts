@@ -1,7 +1,8 @@
-import type { FastifyInstance } from "fastify";
+import { Router } from "express";
 import { getUserOrders, getAllOrders } from "../controller/order.controller";
+import { verifyHmac } from "@digitalocean/hmac-middleware";
 
-export const orderRoutes = async (fastify: FastifyInstance) => {
-    fastify.get('/user-orders', getUserOrders);
-    fastify.get('/orders', getAllOrders);
-};
+export const orderRouter: ReturnType<typeof Router> = Router();
+
+orderRouter.get('/user-orders', verifyHmac, getUserOrders);
+orderRouter.get('/orders', verifyHmac, getAllOrders);

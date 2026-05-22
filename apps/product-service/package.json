@@ -17,6 +17,7 @@
 		"@digitalocean/kafka": "workspace:*",
 		"@digitalocean/product-db": "workspace:*",
 		"@digitalocean/logger": "workspace:*",
+		"@digitalocean/hmac-middleware": "workspace:*",
 		"express": "^5.2.1"
 	},
 	"devDependencies": {

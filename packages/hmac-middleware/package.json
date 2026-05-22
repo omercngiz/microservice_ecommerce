@@ -1,5 +1,5 @@
 {
-	"name": "@digitalocean/auth-middleware",
+	"name": "@digitalocean/hmac-middleware",
 	"version": "1.0.0",
 	"main": "src/index.ts",
 	"type": "module",
@@ -7,14 +7,14 @@
 		"check-types": "tsc --noEmit"
 	},
 	"dependencies": {
-		"express": "^5.2.1",
-		"jsonwebtoken": "^9.0.3"
+		"express": "^5.2.1"
 	},
 	"devDependencies": {
 		"@digitalocean/typescript-config": "workspace:*",
 		"@types/express": "^5.0.6",
-		"@types/jsonwebtoken": "^9.0.10",
-		"@types/node": "^25.9.0"
+		"@types/node": "^25.9.0",
+		"tsx": "^4.22.3",
+		"typescript": "^5.7.0"
 	},
 	"exports": {
 		".": "./src/index.ts"

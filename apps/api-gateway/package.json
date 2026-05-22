@@ -10,7 +10,6 @@
 		"lint": "eslint ."
 	},
 	"dependencies": {
-		"@digitalocean/auth-middleware": "workspace:*",
 		"@digitalocean/logger": "workspace:*",
 		"@fastify/cors": "^11.2.0",
 		"@fastify/http-proxy": "^11.4.4",

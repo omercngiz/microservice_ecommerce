@@ -15,9 +15,12 @@ interface ProductResponse extends CartProduct {
 
 async function getProductBySlug(slug: string): Promise<ProductResponse | null> {
 	try {
-		const res = await fetch(`http://localhost:8000/products/slug/${slug}`, {
-			next: { revalidate: 60 },
-		});
+		const res = await fetch(
+			`${process.env.NEXT_PUBLIC_API_GATEWAY_URL}/product/products/slug/${slug}`,
+			{
+				next: { revalidate: 60 },
+			},
+		);
 		if (!res.ok) return null;
 		return res.json();
 	} catch {

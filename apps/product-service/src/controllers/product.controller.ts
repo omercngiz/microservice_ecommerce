@@ -3,6 +3,10 @@ import { Prisma, prisma } from '@digitalocean/product-db';
 import { producer } from '../utils/kafka';
 
 export const createProduct = async (req: Request, res: Response) => {
+    if (req.user?.role !== 'ADMIN') {
+        return res.status(403).json({ message: "Bu işleme yalnızca admin erişebilir." });
+    }
+
     const body = req.body;
     const items: Prisma.ProductCreateInput[] = Array.isArray(body) ? body : [body];
 
@@ -27,16 +31,12 @@ export const createProduct = async (req: Request, res: Response) => {
 }
 
 export const updateProduct = async (req: Request, res: Response) => {
-    const id = req.params.id;
+    if (req.user?.role !== 'ADMIN') {
+        return res.status(403).json({ message: "Bu işleme yalnızca admin erişebilir." });
+    }
+
+    const id = req.params.id as string;
     const data: Prisma.ProductUpdateInput = req.body;
-
-    if(!id) {
-        return res.status(400).json({ message: "Product ID is required" });
-    }
-
-    if(Array.isArray(id)) {
-        return res.status(400).json({ message: "Product ID must be a single value" });
-    }
 
     const product = await prisma.product.update({
         where: { id },
@@ -47,15 +47,11 @@ export const updateProduct = async (req: Request, res: Response) => {
 }
 
 export const deleteProduct = async (req: Request, res: Response) => {
-    const id = req.params.id;
-
-    if(!id) {
-        return res.status(400).json({ message: "Product ID is required" });
+    if (req.user?.role !== 'ADMIN') {
+        return res.status(403).json({ message: "Bu işleme yalnızca admin erişebilir." });
     }
 
-    if(Array.isArray(id)) {
-        return res.status(400).json({ message: "Product ID must be a single value" });
-    }
+    const id = req.params.id as string;
 
     await prisma.product.delete({
         where: { id }
@@ -73,6 +69,7 @@ export const getProductBySlug = async (req: Request, res: Response) => {
         where: { slug },
         select: {
             id: true,
+            stripeProductId: true,
             name: true,
             price: true,
             slug: true,
@@ -95,20 +92,13 @@ export const getProductBySlug = async (req: Request, res: Response) => {
 }
 
 export const getProduct = async (req: Request, res: Response) => {
-    const id = req.params.id;
-    
-    if(!id) {
-        return res.status(400).json({ message: "Product ID is required" });
-    }
-
-    if(Array.isArray(id)) {
-        return res.status(400).json({ message: "Product ID must be a single value" });
-    }
+    const id = req.params.id as string;
     
     const product = await prisma.product.findUnique({
         where: { id },
         select: {
             id: true,
+            stripeProductId: true,
             name: true,
             price: true,
             slug: true,
@@ -173,6 +163,7 @@ export const getProducts = async (req: Request, res: Response) => {
             price: true,
             slug: true,
             images: true,
+            stripeProductId: true,
             category: {
                 select: {
                     name: true,

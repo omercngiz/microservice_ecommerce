@@ -2,22 +2,22 @@ import type { Request, Response } from 'express';
 import { Prisma, prisma } from '@digitalocean/product-db';
 
 export const createCategory = async (req: Request, res: Response) => {
+    if (req.user?.role !== 'ADMIN') {
+        return res.status(403).json({ message: "Bu işleme yalnızca admin erişebilir." });
+    }
+
     const data: Prisma.CategoryCreateInput = req.body;
     const category = await prisma.category.create({ data });
     res.status(201).json(category);
 }
 
 export const updateCategory = async (req: Request, res: Response) => {
-    const id = req.params.id;
+    if (req.user?.role !== 'ADMIN') {
+        return res.status(403).json({ message: "Bu işleme yalnızca admin erişebilir." });
+    }
+
+    const id = req.params.id as string;
     const data: Prisma.CategoryUpdateInput = req.body;
-
-    if(!id) {
-        return res.status(400).json({ message: "Category ID is required" });
-    }
-
-    if(Array.isArray(id)) {
-        return res.status(400).json({ message: "Category ID must be a single value" });
-    }
 
     const category = await prisma.category.update({
         where: { id },
@@ -28,15 +28,11 @@ export const updateCategory = async (req: Request, res: Response) => {
 }
 
 export const deleteCategory = async (req: Request, res: Response) => {
-    const id = req.params.id;
-
-    if(!id) {
-        return res.status(400).json({ message: "Category ID is required" });
+    if (req.user?.role !== 'ADMIN') {
+        return res.status(403).json({ message: "Bu işleme yalnızca admin erişebilir." });
     }
 
-    if(Array.isArray(id)) {
-        return res.status(400).json({ message: "Category ID must be a single value" });
-    }
+    const id = req.params.id as string;
 
     await prisma.category.delete({
         where: { id }
@@ -46,15 +42,7 @@ export const deleteCategory = async (req: Request, res: Response) => {
 }
 
 export const getCategory = async (req: Request, res: Response) => {
-    const id = req.params.id;
-
-    if(!id) {
-        return res.status(400).json({ message: "Category ID is required" });
-    }
-
-    if(Array.isArray(id)) {
-        return res.status(400).json({ message: "Category ID must be a single value" });
-    }
+    const id = req.params.id as string;
 
     const category = await prisma.category.findUnique({
         where: { id },

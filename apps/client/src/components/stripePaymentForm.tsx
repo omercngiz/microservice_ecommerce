@@ -8,6 +8,8 @@ import {
 } from "@stripe/react-stripe-js";
 import { Button } from "./ui/button";
 import { useCart } from "@/context/cart-context";
+import { useAuth } from "@/context/auth-context";
+import { tokenStore } from "@/lib/token-store";
 
 interface StripePaymentFormProps {
 	onBack: () => void;
@@ -19,49 +21,53 @@ const stripePromise = loadStripe(
 
 const StripePaymentForm = ({ onBack }: StripePaymentFormProps) => {
 	const { items } = useCart();
-	//const fetchClientSecret = React.useCallback(async (token: string) => {
-	// Create a Checkout Session
-	// return fetch(
-	// 	`${process.env.NEXT_PUBLIC_PAYMENT_SERVICE_URL}/session/create-checkout-session`,
-	// 	{
-	// 		method: "POST",
-	// 		headers: {
-	// 			Authorization: `Bearer ${token}`,
-	// 			"Content-Type": "application/json",
-	// 		},
-	// 		body: JSON.stringify({
-	// 			cart: items.map((item) => ({
-	// 				id: item.product.id,
-	// 				name: item.product.name,
-	// 				quantity: item.quantity,
-	// 			})),
-	// 		}),
-	// 	},
-	// )
-	// 		.then((res) => res.json())
-	// 		.then((data) => data.clientSecret);
-	// }, []);
+	const { isLoading, isAuthenticated } = useAuth();
 
-	const [token, setToken] = React.useState<string | null>(null);
+	const fetchClientSecret = React.useCallback(async () => {
+		const token = tokenStore.get();
+		const res = await fetch(
+			`${process.env.NEXT_PUBLIC_API_GATEWAY_URL}/payment/stripe/session/create-checkout-session`,
+			{
+				method: "POST",
+				headers: {
+					Authorization: `Bearer ${token}`,
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					cart: items.map((item) => ({
+						id: item.product.id,
+						name: item.product.name,
+						quantity: item.quantity,
+					})),
+				}),
+			},
+		);
 
-	React.useEffect(() => {
-		const token = localStorage.getItem("accessToken");
-		setToken(token);
-	}, []);
+		if (!res.ok) {
+			const errBody = await res
+				.json()
+				.catch(() => ({ error: `HTTP ${res.status}` }));
+			throw new Error(errBody.error ?? `HTTP ${res.status}`);
+		}
 
-	if (!token) {
+		const data = (await res.json()) as { clientSecret: string };
+		return data.clientSecret;
+	}, [items]);
+
+	if (isLoading) {
 		return <p>Loading...</p>;
 	}
 
-	// const options = {
-	// 	fetchClientSecret: () => fetchClientSecret(token),
-	// };
+	if (!isAuthenticated) {
+		return <p>Lütfen giriş yapın.</p>;
+	}
+
+	const options = {
+		fetchClientSecret,
+	};
 
 	return (
 		<div id="checkout">
-			<div>
-				<p>options: {JSON.stringify(options)}</p>
-			</div>
 			<EmbeddedCheckoutProvider stripe={stripePromise} options={options}>
 				<EmbeddedCheckout />
 			</EmbeddedCheckoutProvider>

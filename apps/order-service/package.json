@@ -17,15 +17,16 @@
 		"@digitalocean/kafka": "workspace:*",
 		"@digitalocean/logger": "workspace:*",
 		"@digitalocean/order-db": "workspace:*",
-		"fastify": "^5.8.4"
+		"@digitalocean/hmac-middleware": "workspace:*",
+		"express": "^5.1.0"
 	},
 	"devDependencies": {
 		"@digitalocean/eslint-config": "workspace:*",
 		"@digitalocean/types": "workspace:*",
 		"@digitalocean/typescript-config": "workspace:*",
+		"@types/express": "^5.0.3",
 		"@types/node": "^22.19.15",
 		"eslint": "^9.0.0",
-		"pino-pretty": "^13.1.3",
 		"tsx": "^4.21.0",
 		"typescript": "^5.9.3"
 	}
