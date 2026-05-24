@@ -26,7 +26,7 @@ const StripePaymentForm = ({ onBack }: StripePaymentFormProps) => {
 	const fetchClientSecret = React.useCallback(async () => {
 		const token = tokenStore.get();
 		const res = await fetch(
-			`${process.env.NEXT_PUBLIC_API_GATEWAY_URL}/payment/stripe/session/create-checkout-session`,
+			`${process.env.NEXT_PUBLIC_API_GATEWAY_URL}/cart/checkout`,
 			{
 				method: "POST",
 				headers: {
@@ -34,10 +34,13 @@ const StripePaymentForm = ({ onBack }: StripePaymentFormProps) => {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					cart: items.map((item) => ({
-						id: item.product.id,
+					items: items.map((item) => ({
+						productId: item.product.id,
 						name: item.product.name,
+						price: item.product.price,
 						quantity: item.quantity,
+						slug: item.product.slug,
+						images: item.product.images,
 					})),
 				}),
 			},

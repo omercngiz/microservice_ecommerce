@@ -1,6 +1,7 @@
 {
 	"$schema": "https://turborepo.dev/schema.json",
 	"ui": "tui",
+	"concurrency": "15",
 	"globalEnv": [
 		"PORT",
 		"STRIPE_SECRET_KEY",
@@ -9,7 +10,9 @@
 		"JWT_ACCESS_SECRET",
 		"JWT_REFRESH_SECRET",
 		"NODE_ENV",
-		"PRODUCT_SERVICE_URL"
+		"PRODUCT_SERVICE_URL",
+		"REDIS_HOST",
+		"REDIS_PORT"
 	],
 	"tasks": {
 		"build": {

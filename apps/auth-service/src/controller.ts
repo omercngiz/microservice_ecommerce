@@ -4,6 +4,7 @@ import * as argon2 from 'argon2';
 import { prisma } from '@digitalocean/auth-db'; 
 import jwt from 'jsonwebtoken';
 import { loginSchema } from './schemas';
+import { producer } from './utils/kafka.js';
 
 export const registerController = async (req: Request, res: Response) => {
   try {
@@ -49,6 +50,14 @@ export const registerController = async (req: Request, res: Response) => {
         email: true
       }
     });
+
+    // Hoşgeldin maili için Kafka eventi gönder (fire-and-forget)
+    producer.send("auth.register", {
+      value: {
+        userEmail: newUser.email,
+        firstName: newUser.firstName ?? undefined,
+      },
+    }).catch(() => { /* non-critical */ });
 
     return res.status(201).json({ 
       message: "Kullanıcı başarıyla oluşturuldu.",

@@ -122,6 +122,36 @@ server.register(httpProxy, {
     }
 });
 
+// Sepet servisi: Tüm route'lar JWT gerektirir
+server.register(httpProxy, {
+    upstream: process.env.CART_SERVICE_URL as string,
+    prefix: '/cart',
+    preHandler: verifyAuth,
+    replyOptions: {
+        rewriteRequestHeaders: (originalReq, headers) => ({
+            ...headers,
+            ...signGatewayRequest(originalReq),
+        })
+    }
+});
+
+// Envanter servisi: GET stok sorgulama herkese açık, yazma işlemleri JWT gerektirir
+server.register(httpProxy, {
+    upstream: process.env.INVENTORY_SERVICE_URL as string,
+    prefix: '/inventory',
+    preHandler: async (req: FastifyRequest, reply: FastifyReply) => {
+        if (req.method !== 'GET') {
+            await verifyAuth(req, reply);
+        }
+    },
+    replyOptions: {
+        rewriteRequestHeaders: (originalReq, headers) => ({
+            ...headers,
+            ...signGatewayRequest(originalReq),
+        })
+    }
+});
+
 // Sunucuyu Ayağa Kaldır
 const start = async () => {
     try {
