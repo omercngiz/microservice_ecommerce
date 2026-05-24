@@ -7,12 +7,29 @@ datasource db {
   provider = "postgresql"
 }
 
-model Inventory {
-  id        Int      @id @default(autoincrement())
-  productId Int
-  quantity  Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model InventoryItem {
+  id             String   @id @default(cuid())
+  productId      String   @unique
+  totalStock     Int
+  availableStock Int
+  reservedStock  Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  @@index([productId])
+  reservations Reservation[]
+}
+
+model Reservation {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  quantity  Int
+  status    String   @default("PENDING") // PENDING | CONFIRMED | CANCELLED | EXPIRED
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  inventoryItem InventoryItem @relation(fields: [productId], references: [productId])
+
+  @@index([userId, status])
+  @@index([status, expiresAt])
 }

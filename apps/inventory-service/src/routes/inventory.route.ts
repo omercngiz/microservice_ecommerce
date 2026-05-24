@@ -9,6 +9,6 @@ inventoryRouter.get("/stock/:productId", getStock);
 
 // HMAC korumalı (iç servisler + admin)
 inventoryRouter.post("/stock", verifyHmac, setStock);
-inventoryRouter.post("/reserve", verifyHmac, reserve);
+inventoryRouter.post("/reserve", reserve);
 
 export { inventoryRouter };

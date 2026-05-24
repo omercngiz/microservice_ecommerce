@@ -6,6 +6,7 @@ import { signInternalRequest } from "@digitalocean/hmac-middleware";
 export const createCheckoutSession = async (req: Request, res: Response) => {
     const { cart } = req.body;
     const userId = req.user?.id;
+    const userRole = req.user?.role;
 
     if (!userId) {
         return res.status(401).json({ error: "Kullanıcı kimliği doğrulanamadı." });
@@ -13,7 +14,7 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
 
     const lineItems = await Promise.all(
         cart.map(async (item: { id: string; name: string; quantity: number }) => {
-            const hmacHeaders = signInternalRequest();
+            const hmacHeaders = signInternalRequest(userId, userRole);
             const productRes = await fetch(`${process.env.PRODUCT_SERVICE_URL}/products/${item.id}`, {
                 headers: hmacHeaders,
             });

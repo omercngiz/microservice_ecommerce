@@ -14,6 +14,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_CLUSTER_ID: 7Dvn0OLMQo-bg4qmCmflVg
       ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     ports:
       - "9094:9094"
     networks:
@@ -33,6 +34,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_CLUSTER_ID: 7Dvn0OLMQo-bg4qmCmflVg
       ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     ports:
       - "9095:9095"
     networks:
@@ -52,6 +54,7 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_CLUSTER_ID: 7Dvn0OLMQo-bg4qmCmflVg
       ALLOW_PLAINTEXT_LISTENER: "yes"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     ports:
       - "9096:9096"
     networks:

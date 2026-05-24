@@ -4,7 +4,7 @@ import { customLogger } from "@digitalocean/logger";
 
 export const runKafkaSubscriptions = async () => {
     // Ödeme başarılı → rezervasyonları onayla
-    consumer.subscribe("payment.successful", async (message: { value: { userId?: string } }) => {
+    await consumer.subscribe("payment.successful", async (message: { value: { userId?: string } }) => {
         const userId = message.value?.userId;
         if (!userId) return;
         try {
@@ -16,7 +16,7 @@ export const runKafkaSubscriptions = async () => {
     });
 
     // Ödeme başarısız → rezervasyonları serbest bırak
-    consumer.subscribe("payment.failed", async (message: { value: { userId?: string } }) => {
+    await consumer.subscribe("payment.failed", async (message: { value: { userId?: string } }) => {
         const userId = message.value?.userId;
         if (!userId) return;
         try {
@@ -28,7 +28,7 @@ export const runKafkaSubscriptions = async () => {
     });
 
     // Yeni ürün oluşturuldu → stok kaydı aç (stok=0)
-    consumer.subscribe("product.created", async (message: { value: { id?: string } }) => {
+    await consumer.subscribe("product.created", async (message: { value: { id?: string } }) => {
         const productId = message.value?.id;
         if (!productId) return;
         try {

@@ -53,11 +53,13 @@ export const deleteProduct = async (req: Request, res: Response) => {
 
     const id = req.params.id as string;
 
+    const existing = await prisma.product.findUnique({ where: { id }, select: { stripeProductId: true } });
+
     await prisma.product.delete({
         where: { id }
     });
 
-    producer.send("product.deleted", { value: id });
+    producer.send("product.deleted", { value: { id, stripeProductId: existing?.stripeProductId ?? null } });
 
     return res.status(200).json({ message: `Product with ID ${id} has been deleted` });
 }

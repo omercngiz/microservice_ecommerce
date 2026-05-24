@@ -13,7 +13,7 @@ export const runKafkaSubscribtions = async () => {
             return;
         }
 
-        const hmacHeaders = signInternalRequest();
+        const hmacHeaders = signInternalRequest("payment-service", "ADMIN");
         const updateRes = await fetch(`${process.env.PRODUCT_SERVICE_URL}/products/${product.id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json', ...hmacHeaders },
@@ -27,10 +27,15 @@ export const runKafkaSubscribtions = async () => {
     });
 
     consumer.subscribe("product.deleted", async (message) => {
-        const productId = message.value;
-        console.log("Received product.deleted event:", productId);
+        const { id, stripeProductId } = message.value as { id: string; stripeProductId: string | null };
+        console.log("Received product.deleted event:", id);
 
-        await deleteStripeProduct(productId);
+        if (!stripeProductId) {
+            console.log(`No stripeProductId for product ${id}, skipping Stripe deletion`);
+            return;
+        }
+
+        await deleteStripeProduct(stripeProductId);
     });
 
     await consumer.run();

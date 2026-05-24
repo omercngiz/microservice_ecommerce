@@ -31,7 +31,7 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
 const start = async () => {
     try {
         await Promise.all([producer.connect(), consumer.connect()]);
-        runKafkaSubscriptions();
+        await runKafkaSubscriptions();
         startReservationScheduler();
 
         const port = Number(process.env.PORT) || 8005;
@@ -45,3 +45,5 @@ const start = async () => {
 };
 
 start();
+
+
